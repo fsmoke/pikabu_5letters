@@ -334,6 +334,7 @@ namespace _5Letters
 			this.textBoxWords.Multiline = true;
 			this.textBoxWords.Name = "textBoxWords";
 			this.textBoxWords.ReadOnly = true;
+			this.textBoxWords.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
 			this.textBoxWords.Size = new System.Drawing.Size(636, 197);
 			this.textBoxWords.TabIndex = 0;
 			// 

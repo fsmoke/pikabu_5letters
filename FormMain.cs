@@ -53,21 +53,29 @@ namespace _5Letters
 					if (_wrongPos[i] == null)
 						_wrongPos[i] = new List<char>();
 					if (cbs[i].SelectedIndex == 2)
+					{
 						_wrongPos[i].Add(char.ToLower(letter));
-					else if (cbs[i].SelectedIndex == 0)
-						_absense.Add(char.ToLower(letter));
+					}
 					else
 					{
-						tb.ReadOnly = true;
-						tb.Enabled = false;
-						cbs[i].Enabled = false;
+						_wrongPos[i].Add('\0');
+						if (cbs[i].SelectedIndex == 0)
+							_absense.Add(char.ToLower(letter));
+						else
+						{
+							tb.ReadOnly = true;
+							tb.Enabled = false;
+							cbs[i].Enabled = false;
+						}
 					}
 				}
+				else
+					_wrongPos[i].Add('\0');
 				variant.Add(new KeyValuePair<char, Color>(letter, tb.BackColor));
 			}
 
 			//main process here
-			var words = new List<string>();
+			var words0 = new List<string>();
 			foreach (var word in _allWords)
 			{
 				if (word.Length < 5)
@@ -134,7 +142,57 @@ namespace _5Letters
 				if (!found)
 					continue;
 
-				words.Add(word);
+				words0.Add(word);
+			}
+			//additional checks
+			
+			var existingChars = new List<char>();
+
+			for (int i = 0; i < _wrongPos[0].Count; ++i)
+			{
+				var existingCharsByLine = new Dictionary<char, int>();
+
+				for (int j = 0; j < 5; ++j)
+				{
+					if (_wrongPos[j][i] != '\0')
+					{
+						int letterCount = 0;
+						if (existingCharsByLine.TryGetValue(_wrongPos[j][i], out letterCount))
+						{
+							++letterCount;
+							existingCharsByLine[_wrongPos[j][i]] = letterCount;
+						}
+						else
+							existingCharsByLine[_wrongPos[j][i]] = 1;
+					}
+				}
+				foreach (var letter in existingCharsByLine)
+				{
+					int count = 0;
+					foreach (var el in existingChars)
+						if (el == letter.Key)
+							++count;
+
+					for (int j = count; j < letter.Value; ++j)
+						existingChars.Add(letter.Key);
+				}
+			}
+
+			var words = new List<string>();
+			foreach (var word in words0)
+			{
+				var existingChars0 = new List<char>(existingChars);
+				for (int i = 0; i < 5; ++i)
+				{
+					var tb = (cbs[i].Tag as TextBox);
+					if (tb.ReadOnly)
+						continue;
+					var c = char.ToLower(word[i]);
+					if (existingChars0.Contains(c))
+						existingChars0.Remove(c);
+				}
+				if (existingChars0.Count == 0)
+					words.Add(word);
 			}
 			//-----------------
 			string comma = "";
