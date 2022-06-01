@@ -184,9 +184,9 @@ namespace _5Letters
 				var existingChars0 = new List<char>(existingChars);
 				for (int i = 0; i < 5; ++i)
 				{
-					var tb = (cbs[i].Tag as TextBox);
-					if (tb.ReadOnly)
-						continue;
+					//var tb = (cbs[i].Tag as TextBox);
+					//if (tb.ReadOnly)
+					//	continue;
 					var c = char.ToLower(word[i]);
 					if (existingChars0.Contains(c))
 						existingChars0.Remove(c);
