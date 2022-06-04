@@ -74,6 +74,16 @@ namespace _5Letters
 				variant.Add(new KeyValuePair<char, Color>(letter, tb.BackColor));
 			}
 
+			for (int i = 0; i < _wrongPos[0].Count; ++i)
+			{
+				for (int j = 0; j < 5; ++j)
+				{
+					if (_wrongPos[j][i] != '\0')
+						if (_absense.Contains(_wrongPos[j][i]))
+							_absense.Remove(_wrongPos[j][i]);
+				}
+			}
+
 			//main process here
 			var words0 = new List<string>();
 			foreach (var word in _allWords)
